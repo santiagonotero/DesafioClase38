@@ -1,12 +1,16 @@
 const passport = require('passport')
-const modelProductos = require('../models/productos')
-const modelMensajes = require('../models/mensajes')
+//const modelProductos = require('../models/productos')
+//const modelMensajes = require('../models/mensajes')
+const DataModel = require('../models/models.Factory')
 const CPUS = require("os").cpus().length
 const logger = require("../Logs/winston")
 
-module.exports={
-    main: async (req,res)=>{
+modelProductos= DataModel.getModel('productos')
+modelMensajes= DataModel.getModel('mensajes')
 
+module.exports={
+
+    main: async (req,res)=>{
         logger.info('Un usuario accedió al sitio')
         const items = await modelProductos.cargarProductos()
         const mensajes = await modelMensajes.cargarMensajes() 

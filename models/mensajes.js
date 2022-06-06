@@ -54,7 +54,7 @@ class Mensajes{
         }
         catch(err){
             logger.error('Error cargando mensajes')
-            console.log(err)
+            logger.error(err)
         }
     }
 

@@ -1,9 +1,11 @@
 const LocalStrategy = require('passport-local').Strategy
-const Usuarios = require('../models/users')
+//const Usuarios = require('../models/users')
+const DataModel = require('../models/models.Factory')
 const logger = require("../Logs/winston")
 
 module.exports = (passport) =>{
 
+    const Usuarios = DataModel.getModel('usuarios')
     const authUser = async (email, password, done) => {
         try {
           // Verifica que exista el email

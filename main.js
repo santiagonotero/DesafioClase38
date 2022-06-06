@@ -13,6 +13,19 @@ const Filestore = require('session-file-store')(session)
 const passport = require('passport')
 const flash = require('express-flash')
 const initializePassport = require('./Passport/local')
+//>> Consignas:
+// Modificar la capa de persistencia incorporando los conceptos de Factory, DAO, y DTO.
+// Los DAOs deben presentar la misma interfaz hacia la lógica de negocio de nuestro servidor.
+// El DAO seleccionado (por un parámetro en línea de comandos como lo hicimos anteriormente) 
+//    será devuelto por una Factory para que la capa de negocio opere con el.
+// Cada uno de estos casos de persistencia, deberán ser implementados usando el patrón singleton 
+//    que impida crear nuevas instancias de estos mecanismos de acceso a los datos.
+// Comprobar que si llamo a la factory dos veces, con una misma opción elegida, 
+//    devuelva la misma instancia.
+// Implementar el patrón Repository para la persistencia de productos y mensajes.
+
+
+
 const prodMethod = require('./models/productos')
 const msgMethod = require('./models/mensajes')
 const homeRouter = require('./routes/routes')
@@ -29,7 +42,7 @@ const iniciarMain=()=>{
   
   
   mongoose.connect(`${process.env.MONGODB_SCHEMA}://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOSTNAME}/${process.env.MONGODB_DATABASE}?${process.env.MONGODB_OPTIONS}`).then(()=>{
-    console.log("Conectado con base de datos MongoDB")
+    logger.info("Conectado con base de datos MongoDB")
   })
   
   let messagePool=[]
@@ -79,7 +92,7 @@ const iniciarMain=()=>{
 
     // iniciamos la conexión del socket
     io.on("connection", async function (socket) {   //Mensaje que indica una conexión. 
-      console.log("Un cliente se ha conectado")
+      logger.info("Un cliente se ha conectado")
       msgMethod.cargarMensajes().then((listaMensajes)=>{
         socket.emit('messages', listaMensajes)
       })
@@ -122,7 +135,7 @@ const iniciarMain=()=>{
   
       if(args.mode =='cluster'){   //Si el modo es Cluster...
   
-        console.log('modo CLUSTER')
+        logger.info('Proceso iniciado en modo CLUSTER')
         if(cluster.isMaster) {    // Si el proceso es padre...
           for(let i=0; i<=numCPUs; i++){
             
